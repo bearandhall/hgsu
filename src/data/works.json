@@ -1,0 +1,139 @@
+{
+  "issue1": {
+    "cover": "/cover.jpg",
+    "coverArtist": "@ray_331331331",
+    "works": 
+
+[
+  {
+    "id": "work1",
+    "issue": "1",
+    "title": "enter the pass word 비판이란 무엇인가",
+    "author": "쓰레기봉투",
+    "authorBio": "sseulegisseulegi2@gmail.com",
+    "pdf": "/pdfs/work1.pdf"
+  },
+  {
+    "id": "work2",
+    "issue": "1",
+    "title": "원고 N. 미완된 논고를 위한 미완된 논고: 정신분석적 비평의 기초에 대해서",
+    "author": "쓰레기봉투",
+    "authorBio": "sseulegisseulegi2@gmail.com",
+    "pdf": "/pdfs/work2.pdf"
+  },
+    {
+    "id": "work3",
+    "issue": "1",
+    "title": "오려붙인 시 (外 드디어 쓰는 한 편의 이기적인 시)",
+    "author": "루루",
+    "authorBio": "여자의 ‘무언가’를 글자와 입는 조각으로 구현해 내고 있습니다.",
+    "pdf": "/pdfs/work3.pdf"
+  },
+    {
+    "id": "work4",
+    "issue": "1",
+    "title": "혜연 언니에게: 신체 훼손을 통해 세상과 더 연결되기",
+    "author": "루루",
+    "authorBio": "여자의 ‘무언가’를 글자와 입는 조각으로 구현해 내고 있습니다.",
+    "pdf": "/pdfs/work4.pdf"
+  },
+    {
+    "id": "work5",
+    "issue": "1",
+    "title": "신세감탄",
+    "author": "툴 계넵",
+    "authorBio": "추레한 시를 쓴다. 시인은 될 수 없고 되고 싶지 않다. 처세술이 좋지 못하며 타고나길 심성이 사악하다. https://blog.naver.com/thule_genev",
+    "pdf": "/pdfs/work5.pdf"
+  },
+    {
+    "id": "work6",
+    "issue": "1",
+    "title": "폭염",
+    "author": "이안",
+    "authorBio": "노등단 예스시인 @insideofaan",
+    "pdf": "/pdfs/work6.pdf"
+  },
+    {
+    "id": "work7",
+    "issue": "1",
+    "title": "F64 / YELLOW",
+    "author": "김지우",
+    "authorBio": "",
+    "pdf": "/pdfs/work7.pdf"
+  },
+    {
+    "id": "work8",
+    "issue": "1",
+    "title": "초식성 룸메이트",
+    "author": "정어리기름",
+    "authorBio": "전쟁같은 막학기 등굣길을 견디는 중",
+    "pdf": "/pdfs/work8.pdf"
+  },
+    {
+    "id": "work9",
+    "issue": "1",
+    "title": "영화연기 101",
+    "author": "진유이",
+    "authorBio": "@mavolonte / 에세이 살기연습 시리즈를 쓰고 있습니다.",
+    "pdf": "/pdfs/work9.pdf"
+  },
+  {
+    "id": "work10",
+    "issue": "1",
+    "title": "이 모든 건 이비인후과에서 시작되었다",
+    "author": "진유이",
+    "authorBio": "@mavolonte / 에세이 살기연습 시리즈를 쓰고 있습니다.",
+    "pdf": "/pdfs/work10.pdf"
+  },
+    {
+    "id": "work11",
+    "issue": "1",
+    "title": "개는 눈이 없다",
+    "author": "유령2",
+    "authorBio": "유령2입니다. @devil_tree_man",
+    "pdf": "/pdfs/work11.pdf"
+  },
+    {
+    "id": "work12",
+    "issue": "1",
+    "title": "나의 작은 장난감 신",
+    "author": "이우리",
+    "authorBio": "",
+    "pdf": "/pdfs/work12.pdf"
+  },
+    {
+    "id": "work13",
+    "issue": "1",
+    "title": "대답들을 잠재적으로 역추적하는 , 공간들에 할당한 질문들이다.",
+    "author": "권혁준",
+    "authorBio": "",
+    "pdf": "/pdfs/work13.pdf"
+  },
+    {
+    "id": "work14",
+    "issue": "1",
+    "title": "무명한 이야기",
+    "author": "김만복",
+    "authorBio": "",
+    "pdf": "/pdfs/work14.pdf"
+  },
+      {
+    "id": "work15",
+    "issue": "1",
+    "title": "2022 인천문화재단 문화예술지원사업 지원신청서_시각예술분야_출판",
+    "author": "방수지, 이레나",
+    "authorBio": "독립 큐레이터로 활동 중입니다. 버틀러 수행성 개념에 관심을 갖고 주체의 실천을 탐구합니다. /독립... ",
+    "pdf": "/pdfs/work15.pdf"
+  },
+      {
+    "id": "work16",
+    "issue": "1",
+    "title": "2022년 예술창작활동 지원사업지원 신청서_시각분야",
+    "author": "양승욱",
+    "authorBio": "장난감, 동물, 무지개, 산책, 쓰레기를 좋아한다. 평소에는 프로 알바생, 가끔 전시할 때는 작가라고 불리는 생활을 하고 있다 / 2022년도에 서울문화재단에 제출했지만 광탈한 전시 기획서이다. 결국 전시는 다음 해에 재단의 지원 없이 이대로 진행했다.",
+    "pdf": "/pdfs/work16.pdf"
+  }
+]
+
+  }
+}

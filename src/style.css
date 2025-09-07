@@ -1,0 +1,64 @@
+/* 기본 폰트 */
+body {
+  margin: 0;
+  /* min-width: 320px; */
+  /* min-height: 100vh; */
+  color: #fff;
+  background-color: #242424;
+  font-family: 'Orbitron', sans-serif;
+}
+
+
+/* 제목/메뉴용 폰트 */
+h1, h2, h3, .sans {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* 로고 스타일 */
+.logo {
+  height: 10vh; /* 화면 기준 10% */
+  /* padding: 1em; */
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+/* 버튼 기본 */
+/* button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+} */
+
+/* button:hover {
+  border-color: #646cff;
+} */
+
+/* 링크 스타일은 Tailwind에 맡김 */
+
+/* a {
+  text-decoration: none;
+  color: inherit;
+} */
+
+
+/* 다크/라이트 모드 */
+@media (prefers-color-scheme: light) {
+  body {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  /* button {
+    background-color: #f9f9f9;
+  } */
+}
