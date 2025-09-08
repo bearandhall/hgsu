@@ -229,9 +229,55 @@ function WorkDetail() {
 
       <h2 className="text-2xl font-bold mb-2">{work.title}</h2>
       <p className="text-lg text-gray-700 mb-2"><em>{work.author}</em></p>
-      <p className="text-sm italic mt-1">
-        <AutoInstagramLink text={work.authorBio} />
-      </p>
+
+<p className="text-sm italic mt-1">
+  {work.authorBio.split(/\s+/).map((part, i) => {
+    if (part.startsWith("@")) {
+      return (
+        <a
+          key={i}
+          href={`https://instagram.com/${part.slice(1)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            padding: "2px 6px",
+            borderRadius: "9999px",
+            backgroundColor: "#DBEAFE", // Tailwind bg-blue-100
+            color: "#1D4ED8",          // Tailwind text-blue-700
+            fontWeight: 500,
+            textDecoration: "none",
+            marginRight: "4px",
+            marginBottom: "4px",
+            transition: "background-color 0.2s, box-shadow 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = "#BFDBFE"}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = "#DBEAFE"}
+        >
+          {part}
+        </a>
+      );
+    }  else if (part.startsWith("https://blog.naver.com/")) {
+      // 네이버 블로그 링크
+      return (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline"
+        >
+          {part}
+        </a>
+      );
+    } else {
+      return <span key={i} style={{ marginRight: "4px" }}>{part}</span>;
+    }
+  })}
+</p>
+
+
+
 
       {!isMobile && (
         <iframe
@@ -241,13 +287,23 @@ function WorkDetail() {
         />
       )}
 
-      <a
+      {/* <a
         href={work.pdf}
         download={`제${issue}호_${work.title}.pdf`}
         className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium transition-colors duration-200 hover:bg-blue-100 hover:border-blue-300 mt-4"
       >
         PDF 다운로드
-      </a>
+      </a> */}
+
+      <a
+  href={work.pdf}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium transition-colors duration-200 hover:bg-blue-100 hover:border-blue-300 mt-4"
+>
+  PDF 열기
+</a>
+
     </div>
   );
 }
