@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
 import worksData from "./data/works.json";
 import AuthorBio from "./AuthorBio";
+import AdminList from "./AdminList";
+import AdminEditor from "./AdminEditor";
+
 
 // Header
 function Header() {
@@ -25,7 +28,7 @@ function Header() {
   );
 }
 
-// StyledLink
+// StyledLink (기존 스타일 그대로 유지)
 const StyledLink = ({ to, children }) => (
   <Link
     to={to}
@@ -45,49 +48,6 @@ const StyledLink = ({ to, children }) => (
     {children}
   </Link>
 );
-
-// AutoInstagramLink
-const AutoInstagramLink = ({ text }) => {
-  if (!text) return null;
-  const parts = text.split(/\s+/);
-  return (
-    <>
-      {parts.map((part, idx) => {
-        if (part.startsWith("@")) {
-          return (
-            <a
-              key={idx}
-              href={`https://instagram.com/${part.slice(1)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-2 py-1 m-1 text-blue-600 bg-blue-100 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
-            >
-              {part}
-            </a>
-          );
-        } else if (part.startsWith("https://blog.naver.com/")) {
-          return (
-            <a
-              key={idx}
-              href={part}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-2 py-1 m-1 text-blue-600 bg-blue-100 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
-            >
-              {part}
-            </a>
-          );
-        } else {
-          return (
-            <span key={idx} className="inline-block mr-1 text-black italic">
-              {part}
-            </span>
-          );
-        }
-      })}
-    </>
-  );
-};
 
 // Home
 function Home() {
@@ -113,7 +73,8 @@ function Home() {
             @hgsu_2024
           </a>
         </p>
-        <StyledLink to="/issues/1">1호</StyledLink>
+        <StyledLink to="/issues/1">1호</StyledLink><br></br>
+        <StyledLink to="/issues/2">2호</StyledLink>
       </div>
       {!isMobile && (
         <div>
@@ -156,9 +117,9 @@ function Issue() {
               alt={`제${issue}호 표지`}
               className="w-2/3 rounded shadow object-contain"
             />
-            <p className="text-sm text-gray-600 mt-2">
+            <div className="text-sm text-gray-600 mt-2 whitespace-pre-wrap">
               표지 그림: <AuthorBio bio={issueData.coverArtist} />
-            </p>
+            </div>
           </div>
           <div className="flex flex-col px-2">
             {issueWorks.map((work) => (
@@ -188,9 +149,9 @@ function Issue() {
               alt={`제${issue}호 표지`}
               className="w-full max-w-md h-auto rounded shadow object-contain"
             />
-            <p className="mt-2 text-sm text-gray-600">
+            <div className="mt-2 text-sm text-gray-600">
               표지 그림: <AuthorBio bio={issueData.coverArtist} />
-            </p>
+            </div>
           </div>
         </div>
       )}
@@ -198,7 +159,7 @@ function Issue() {
   );
 }
 
-// WorkDetail
+
 function WorkDetail() {
   const { issue, id } = useParams();
   const issueKey = `issue${issue}`;
@@ -217,12 +178,13 @@ function WorkDetail() {
   if (!work) return <p className="p-8">작품을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="p-4 max-w-[100vw] overflow-x-hidden">
+    <div 
+      className="max-w-[100vw] overflow-x-hidden box-border" 
+      style={{ padding: isMobile ? "2rem 1.5rem" : "2rem 10vw" }}
+    >
+      {/* 1. 상단 내비게이션 */}
       <div className="mb-4">
-        <Link
-          to={`/issues/${issue}`}
-          className="text-sm text-gray-600 hover:underline"
-        >
+        <Link to={`/issues/${issue}`} className="text-sm text-gray-600 hover:underline">
           ← 제{issue}호 목차로 돌아가기
         </Link>
       </div>
@@ -230,80 +192,77 @@ function WorkDetail() {
       <h2 className="text-2xl font-bold mb-2">{work.title}</h2>
       <p className="text-lg text-gray-700 mb-2"><em>{work.author}</em></p>
 
-<p className="text-sm italic mt-1">
-  {work.authorBio.split(/\s+/).map((part, i) => {
-    if (part.startsWith("@")) {
-      return (
-        <a
-          key={i}
-          href={`https://instagram.com/${part.slice(1)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: "inline-block",
-            padding: "2px 6px",
-            borderRadius: "9999px",
-            backgroundColor: "#DBEAFE", // Tailwind bg-blue-100
-            color: "#1D4ED8",          // Tailwind text-blue-700
-            fontWeight: 500,
-            textDecoration: "none",
-            marginRight: "4px",
-            marginBottom: "4px",
-            transition: "background-color 0.2s, box-shadow 0.2s",
-          }}
-          onMouseEnter={e => e.currentTarget.style.backgroundColor = "#BFDBFE"}
-          onMouseLeave={e => e.currentTarget.style.backgroundColor = "#DBEAFE"}
-        >
-          {part}
-        </a>
-      );
-    }  else if (part.startsWith("https://blog.naver.com/")) {
-      // 네이버 블로그 링크
-      return (
-        <a
-          key={i}
-          href={part}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline"
-        >
-          {part}
-        </a>
-      );
-    } else {
-      return <span key={i} style={{ marginRight: "4px" }}>{part}</span>;
-    }
-  })}
-</p>
+      {/* 2. 저자 소개 (AuthorBio 반영 및 줄바꿈 보존) */}
+      <div className="text-sm italic mt-1 mb-6">
+        <AuthorBio bio={work.authorBio} />
+      </div>
 
+      <hr className="my-8 border-gray-200" />
 
-
-
-      {!isMobile && (
-        <iframe
-          src={`${work.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
-          title="" // 제목 숨김
-          className="w-full h-[600px] border rounded mt-4"
-        />
-      )}
-
-      {/* <a
-        href={work.pdf}
-        download={`제${issue}호_${work.title}.pdf`}
-        className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium transition-colors duration-200 hover:bg-blue-100 hover:border-blue-300 mt-4"
-      >
-        PDF 다운로드
-      </a> */}
-
-      <a
-  href={work.pdf}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium transition-colors duration-200 hover:bg-blue-100 hover:border-blue-300 mt-4"
->
-  PDF 열기
-</a>
-
+      {/* 3. 본문 영역 */}
+      <div className="max-w-2xl mx-auto w-full pb-20 box-border">
+        {work.pdf ? (
+          /* PDF 로직 복구 */
+          <div className="flex flex-col items-center">
+            {!isMobile && (
+              <iframe 
+                src={`${work.pdf}#toolbar=0`} 
+                title={work.title} 
+                className="w-full h-[80vh] border rounded mt-4" 
+              />
+            )}
+            <a 
+              href={work.pdf} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium mt-4 hover:bg-blue-50 transition-colors"
+            >
+              PDF 원본 보기
+            </a>
+          </div>
+        ) : (
+          /* 본문 텍스트 데이터 */
+          <div className="w-full">
+            {work.body && work.body.map((block, index) => {
+              switch (block.type) {
+                case "text":
+                  return (
+                    <div 
+                      key={index} 
+                      className={`mb-8 text-lg leading-loose 
+                        ${block.align === 'center' ? 'text-center' : block.align === 'right' ? 'text-right' : 'text-left'}
+                        ${block.bold ? 'font-bold' : 'font-normal'}`}
+                    >
+                      {/* 데이터가 배열이면 문단별로 <p>, 문자열이면 통째로 출력 */}
+                      {Array.isArray(block.value) ? (
+                        block.value.map((line, lineIdx) => (
+                          <p key={lineIdx} className="mb-4 whitespace-pre-wrap">{line}</p>
+                        ))
+                      ) : (
+                        <p className="whitespace-pre-wrap">{block.value}</p>
+                      )}
+                    </div>
+                  );
+                case "image":
+                  return (
+                    <figure key={index} className="my-12 text-center">
+                      <img src={block.src} alt={block.caption} className="max-w-full h-auto rounded shadow-sm mx-auto" />
+                      {block.caption && <figcaption className="mt-3 text-sm text-gray-500 italic text-center">{block.caption}</figcaption>}
+                    </figure>
+                  );
+                case "footnote":
+                  return (
+                    <div key={index} className="mt-6 text-sm text-gray-500 border-t pt-4 flex">
+                      <span className="font-bold mr-2 text-blue-400">[{block.number}]</span>
+                      <span className="flex-1 italic">{block.value}</span>
+                    </div>
+                  );
+                default: return null;
+              }
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -328,6 +287,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/issues/:issue" element={<Issue />} />
             <Route path="/issues/:issue/works/:id" element={<WorkDetail />} />
+            <Route path="/admin" element={<AdminList />} />
+            <Route path="/admin/edit/:issue/:id" element={<AdminEditor />} />
           </Routes>
         </main>
         <Footer />
