@@ -160,6 +160,118 @@ function Issue() {
 }
 
 
+// function WorkDetail() {
+//   const { issue, id } = useParams();
+//   const issueKey = `issue${issue}`;
+//   const issueData = worksData[issueKey];
+//   const [isMobile, setIsMobile] = useState(false);
+
+//   useEffect(() => {
+//     const checkMobile = () => setIsMobile(window.innerWidth < 768);
+//     checkMobile();
+//     window.addEventListener("resize", checkMobile);
+//     return () => window.removeEventListener("resize", checkMobile);
+//   }, []);
+
+//   if (!issueData) return <p className="p-8">호 정보를 찾을 수 없습니다.</p>;
+//   const work = issueData.works.find((w) => w.id === id);
+//   if (!work) return <p className="p-8">작품을 찾을 수 없습니다.</p>;
+
+//   return (
+//     <div 
+//       className="max-w-[100vw] overflow-x-hidden box-border" 
+//       style={{ padding: isMobile ? "2rem 1.5rem" : "2rem 10vw" }}
+//     >
+//       {/* 1. 상단 내비게이션 */}
+//       <div className="mb-4">
+//         <Link to={`/issues/${issue}`} className="text-sm text-gray-600 hover:underline">
+//           ← 제{issue}호 목차로 돌아가기
+//         </Link>
+//       </div>
+
+//       <h2 className="text-2xl font-bold mb-2">{work.title}</h2>
+//       <p className="text-lg text-gray-700 mb-2"><em>{work.author}</em></p>
+
+//       {/* 2. 저자 소개 (AuthorBio 반영 및 줄바꿈 보존) */}
+//       <div className="text-sm italic mt-1 mb-6">
+//         <AuthorBio bio={work.authorBio} />
+//       </div>
+
+//       <hr className="my-8 border-gray-200" />
+
+//       {/* 3. 본문 영역 */}
+//       <div className="max-w-2xl mx-auto w-full pb-20 box-border">
+//         {work.pdf ? (
+//           /* PDF 로직 복구 */
+//           <div className="flex flex-col items-center">
+//             {!isMobile && (
+//               <iframe 
+//                 src={`${work.pdf}#toolbar=0`} 
+//                 title={work.title} 
+//                 className="w-full h-[80vh] border rounded mt-4" 
+//               />
+//             )}
+//             <a 
+//               href={work.pdf} 
+//               target="_blank" 
+//               rel="noopener noreferrer" 
+//               className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-black font-medium mt-4 hover:bg-blue-50 transition-colors"
+//             >
+//               PDF 원본 보기
+//             </a>
+//           </div>
+//         ) : (
+//           /* 본문 텍스트 데이터 */
+//           <div className="w-full">
+//             {work.body && work.body.map((block, index) => {
+//               switch (block.type) {
+//                 case "text":
+//                   return (
+//                     <div 
+//                       key={index} 
+//                       className={`mb-8 text-lg leading-loose 
+//                         ${block.align === 'center' ? 'text-center' : block.align === 'right' ? 'text-right' : 'text-left'}
+//                         ${block.bold ? 'font-bold' : 'font-normal'}`}
+//                     >
+//                       {/* 데이터가 배열이면 문단별로 <p>, 문자열이면 통째로 출력 */}
+//                       {Array.isArray(block.value) ? (
+//                         block.value.map((line, lineIdx) => (
+//                           <p key={lineIdx} className="mb-4 whitespace-pre-wrap">{line}</p>
+//                         ))
+//                       ) : (
+//                         <p className="whitespace-pre-wrap">{block.value}</p>
+//                       )}
+//                     </div>
+//                   );
+//                 case "image":
+//                   return (
+//                     <figure key={index} className="my-12 text-center">
+//                       <img src={block.src} alt={block.caption} className="max-w-full h-auto rounded shadow-sm mx-auto" />
+//                       {block.caption && <figcaption className="mt-3 text-sm text-gray-500 italic text-center">{block.caption}</figcaption>}
+//                     </figure>
+//                   );
+//                 case "footnote":
+//                   return (
+//                     <div key={index} className="mt-6 text-sm text-gray-500 border-t pt-4 flex">
+//                       <span className="font-bold mr-2 text-blue-400">[{block.number}]</span>
+//                       <span className="flex-1 italic">{block.value}</span>
+//                     </div>
+//                   );
+//                 default: return null;
+//               }
+//             })}
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+// Footer
+
+
 function WorkDetail() {
   const { issue, id } = useParams();
   const issueKey = `issue${issue}`;
@@ -177,32 +289,95 @@ function WorkDetail() {
   const work = issueData.works.find((w) => w.id === id);
   if (!work) return <p className="p-8">작품을 찾을 수 없습니다.</p>;
 
+  const footnoteWorks = {
+    "work1774281359564": "ⓐ"
+  };
+
+  const footnoteSymbol = footnoteWorks[work.id];
+
+  // ⭐ 특정 단어 색상 변경 함수 [색상|텍스트]
+const renderStyledText = (text) => {
+    if (typeof text !== "string") return text;
+
+    // [스타일|내용] 패턴을 찾습니다.
+    const parts = text.split(/(\[[\s\w#가-힣]+?\|.*\])/g);
+
+    return parts.map((part, i) => {
+      const match = part.match(/^\[(.*?)\|(.*)\]$/);
+      
+      if (match) {
+        const styleInput = match[1].trim().toLowerCase(); // 'pink bold' 등을 소문자로 변환
+        const content = match[2];
+        
+        const colorMap = {
+          '연두': '#90EE90',
+          'green': '#90EE90',
+          '핑크': '#FFB6C1',
+          'pink': '#FFB6C1'
+        };
+
+        // 입력된 스타일 문자열에 특정 키워드가 포함되어 있는지 확인
+        const isBold = styleInput.includes('bold') || styleInput.includes('볼드');
+        const sizeInput = styleInput.split(' ').find(s => 
+          s.includes('px') || s.includes('em') || s.includes('rem') || ['small', 'large', '작게', '크게'].includes(s)
+        );
+        const sizeMap = {
+          'small': '0.75em',
+          '작게': '0.75em',
+          'large': '1.5em',
+          '크게': '1.5em'
+        };
+        const finalSize = sizeMap[sizeInput] || sizeInput || 'inherit';
+        // 색상 찾기 (입력값 중 colorMap에 있거나 #으로 시작하는 값이 있는지 확인)
+        const foundColor = styleInput.split(' ').find(s => colorMap[s] || s.startsWith('#'));
+        const finalColor = colorMap[foundColor] || foundColor || 'inherit';
+        
+        return (
+          <span 
+            key={i} 
+            style={{ 
+              color: finalColor, 
+              fontWeight: isBold ? 'bold' : 'inherit' ,
+              fontSize: finalSize
+            }}
+          >
+            {content}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
   return (
     <div 
       className="max-w-[100vw] overflow-x-hidden box-border" 
       style={{ padding: isMobile ? "2rem 1.5rem" : "2rem 10vw" }}
     >
-      {/* 1. 상단 내비게이션 */}
       <div className="mb-4">
         <Link to={`/issues/${issue}`} className="text-sm text-gray-600 hover:underline">
           ← 제{issue}호 목차로 돌아가기
         </Link>
       </div>
 
-      <h2 className="text-2xl font-bold mb-2">{work.title}</h2>
+      <h2 className="text-2xl font-bold mb-2">{work.title}
+{footnoteSymbol && (
+          <sup className="text-[0.5em] ml-1 text-blue-400 font-bold mt-1">
+            {footnoteSymbol}
+          </sup>
+        )}
+
+      </h2>
       <p className="text-lg text-gray-700 mb-2"><em>{work.author}</em></p>
 
-      {/* 2. 저자 소개 (AuthorBio 반영 및 줄바꿈 보존) */}
+      {/* Hydration Error 방지를 위해 p 대신 div 사용 */}
       <div className="text-sm italic mt-1 mb-6">
         <AuthorBio bio={work.authorBio} />
       </div>
 
       <hr className="my-8 border-gray-200" />
 
-      {/* 3. 본문 영역 */}
-      <div className="max-w-2xl mx-auto w-full pb-20 box-border">
+      <div className="max-w-2xl mx-auto w-full pb-20 px-6 md:px-0 box-border">
         {work.pdf ? (
-          /* PDF 로직 복구 */
           <div className="flex flex-col items-center">
             {!isMobile && (
               <iframe 
@@ -221,7 +396,6 @@ function WorkDetail() {
             </a>
           </div>
         ) : (
-          /* 본문 텍스트 데이터 */
           <div className="w-full">
             {work.body && work.body.map((block, index) => {
               switch (block.type) {
@@ -229,17 +403,19 @@ function WorkDetail() {
                   return (
                     <div 
                       key={index} 
-                      className={`mb-8 text-lg leading-loose 
+                      className={`mb-12 text-[1.1rem] leading-[1.8] whitespace-pre-wrap break-keep
                         ${block.align === 'center' ? 'text-center' : block.align === 'right' ? 'text-right' : 'text-left'}
                         ${block.bold ? 'font-bold' : 'font-normal'}`}
                     >
-                      {/* 데이터가 배열이면 문단별로 <p>, 문자열이면 통째로 출력 */}
+                      {/* p 대신 div를 써서 중첩 에러 방지 및 스타일 함수 적용 */}
                       {Array.isArray(block.value) ? (
                         block.value.map((line, lineIdx) => (
-                          <p key={lineIdx} className="mb-4 whitespace-pre-wrap">{line}</p>
+                          <div key={lineIdx} className="mb-4">
+                            {renderStyledText(line)}
+                          </div>
                         ))
                       ) : (
-                        <p className="whitespace-pre-wrap">{block.value}</p>
+                        <div>{renderStyledText(block.value)}</div>
                       )}
                     </div>
                   );
@@ -251,12 +427,28 @@ function WorkDetail() {
                     </figure>
                   );
                 case "footnote":
-                  return (
-                    <div key={index} className="mt-6 text-sm text-gray-500 border-t pt-4 flex">
-                      <span className="font-bold mr-2 text-blue-400">[{block.number}]</span>
-                      <span className="flex-1 italic">{block.value}</span>
-                    </div>
-                  );
+                  const getCircleAlphabet = (num) => {
+    // 1은 'ⓐ', 2는 'ⓑ', 3은 'ⓒ'...
+    // 유니코드 'ⓐ' (0x24D0) 값을 활용합니다.
+    if (num >= 1 && num <= 26) {
+      return String.fromCharCode(0x24CF + num);
+    }
+    // 26개가 넘어가면 그냥 숫자로 표시하거나 다른 로직 필요 (일단 숫자로 반환)
+    return `[${num}]`; 
+  };
+return (
+    <div key={index} className="mt-8 text-sm text-gray-500 border-t pt-5 flex items-start">
+      {/* ⭐ 기존 숫자 대신 getCircleAlphabet 함수를 사용하여 기호 출력 */}
+      <span className="font-bold mr-3 text-blue-400 text-lg leading-none">
+        {getCircleAlphabet(block.number)}
+      </span>
+      
+      {/* 각주 내용 출력 (여기에도 renderStyledText를 적용하면 내부 색상/볼드 가능) */}
+      <span className="flex-1 italic leading-relaxed">
+        {renderStyledText(block.value)}
+      </span>
+    </div>
+  );
                 default: return null;
               }
             })}
@@ -267,7 +459,7 @@ function WorkDetail() {
   );
 }
 
-// Footer
+
 function Footer() {
   return (
     <footer className="p-4 border-t text-center text-sm text-gray-600">
